@@ -10,6 +10,9 @@ public struct PutioComponentGallery: View {
     case states
     case feedback
     case forms
+    #if os(iOS)
+      case shell
+    #endif
 
     public var title: String {
       switch self {
@@ -19,6 +22,9 @@ public struct PutioComponentGallery: View {
       case .states: "Screen states"
       case .feedback: "Feedback"
       case .forms: "Forms"
+      #if os(iOS)
+        case .shell: "Shell"
+      #endif
       }
     }
 
@@ -90,6 +96,17 @@ struct GalleryPageView: View {
         FilesGallery()
       case .forms:
         FormsGallery()
+      #if os(iOS)
+        case .shell:
+          ScrollView {
+            VStack(alignment: .leading, spacing: GalleryLayout.sectionGap) {
+              GalleryTitle(page: page)
+              ShellPage()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(GalleryLayout.pagePadding)
+          }
+      #endif
       case .buttons, .transfers, .states, .feedback:
         ScrollView {
           VStack(alignment: .leading, spacing: GalleryLayout.sectionGap) {
@@ -115,6 +132,9 @@ struct GalleryPageView: View {
     case .states: StatesPage()
     case .feedback: FeedbackPage()
     case .files, .forms: EmptyView()
+    #if os(iOS)
+      case .shell: EmptyView()
+    #endif
     }
   }
 }
@@ -165,6 +185,24 @@ private struct ButtonsPage: View {
     }
   }
 }
+
+#if os(iOS)
+  private struct ShellPage: View {
+    var body: some View {
+      GallerySection(caption: "Sidebar storage meter") {
+        ForEach(Array(GalleryFixtures.storageStates.enumerated()), id: \.offset) { _, entry in
+          VStack(alignment: .leading, spacing: GalleryLayout.itemGap) {
+            Text(entry.label)
+              .putioFont(GalleryLayout.bodyFont)
+              .foregroundStyle(PutioTheme.Colors.textSecondary)
+            PutioStorageMeter(storage: entry.storage)
+              .frame(maxWidth: GalleryLayout.sidebarWidth, alignment: .leading)
+          }
+        }
+      }
+    }
+  }
+#endif
 
 private struct FilesGallery: View {
   var body: some View {
@@ -396,6 +434,20 @@ enum GalleryFixtures {
 
   static let routes = ["Frankfurt", "Amsterdam", "New York"]
 
+  #if os(iOS)
+    static let storageStates: [(label: String, storage: PutioAccountSnapshot.Storage)] = [
+      ("Empty", storage(usedBytes: 0)),
+      ("In use", storage(usedBytes: 30_600_000_000)),
+      ("Full", storage(usedBytes: 1_100_000_000_000)),
+    ]
+
+    private static func storage(usedBytes: Int64) -> PutioAccountSnapshot.Storage {
+      let totalBytes: Int64 = 1_100_000_000_000
+      return PutioAccountSnapshot.Storage(
+        availableBytes: totalBytes - usedBytes, totalBytes: totalBytes, usedBytes: usedBytes)
+    }
+  #endif
+
   #if os(iOS) || os(watchOS)
     static let downloadStates: [(state: PutioDownloadState, label: String)] = [
       (.idle, "Idle"),
@@ -444,6 +496,7 @@ enum GalleryLayout {
     static let sectionGap = PutioTheme.Spacing.space4
     static let itemGap = PutioTheme.Spacing.space3
     static let pagePadding = PutioTheme.Spacing.space3
+    static let sidebarWidth = PutioTheme.Spacing.space6 * 2
     static let stateTileHeight = PutioTheme.Spacing.space6 * 2
     static let containerViewportHeight = PutioTheme.Spacing.space6 * 7
     // The scaffold previews inside a scroll page rather than a real sheet,

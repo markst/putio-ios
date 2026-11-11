@@ -1,6 +1,17 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ of %@" : {
+      "comment" : "android: mobile_account_storage_full_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ of %@"
+          }
+        }
+      }
+    },
     "%@ of %@ used" : {
       "comment" : "android: mobile_account_storage_used",
       "localizations" : {
