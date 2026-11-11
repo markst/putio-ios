@@ -861,3 +861,27 @@
 
 /* No comment provided by engineer. */
 "Your trash is empty" = "Your trash is empty";
+
+/* No comment provided by engineer. */
+"%@ was added to put.io. It will appear in your files when it finishes." = "%@ was added to put.io. It will appear in your files when it finishes.";
+
+/* No comment provided by engineer. */
+"Add" = "Add";
+
+/* No comment provided by engineer. */
+"Add to put.io?" = "Add to put.io?";
+
+/* No comment provided by engineer. */
+"Adding..." = "Adding...";
+
+/* No comment provided by engineer. */
+"Magnet link" = "Magnet link";
+
+/* No comment provided by engineer. */
+"Transfer started" = "Transfer started";
+
+/* No comment provided by engineer. */
+"Unsupported link" = "Unsupported link";
+
+/* No comment provided by engineer. */
+"put.io can add http, https, and magnet links." = "put.io can add http, https, and magnet links.";

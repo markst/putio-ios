@@ -154,10 +154,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return handleWebAuthCallbackFailure(error: error)
         }
 
-        var urlComponents = URLComponents()
-        urlComponents.query = callbackURL.fragment
-
-        guard let tokenFragment = urlComponents.queryItems?.first(where: { $0.name == "access_token" }), let token = tokenFragment.value else {
+        guard let token = callbackURL.fragmentValue("access_token") else {
             let error = NSError(
                 domain: "",
                 code: 0,
@@ -166,7 +163,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return handleWebAuthCallbackFailure(error: error)
         }
 
-        guard let returnedState = urlComponents.queryItems?.first(where: { $0.name == "state" })?.value,
+        guard let returnedState = callbackURL.fragmentValue("state"),
               returnedState == currentOAuthState else {
             let error = NSError(
                 domain: "",

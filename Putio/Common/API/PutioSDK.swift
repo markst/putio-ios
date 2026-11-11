@@ -77,9 +77,8 @@ extension PutioSDK {
     var mediaToken: String { config.token }
 
     func audioStreamURL(fileID: Int) -> URL? {
-        var components = URLComponents(string: "\(config.baseURL)/files/\(fileID)/stream")
-        components?.queryItems = [URLQueryItem(name: "oauth_token", value: mediaToken)]
-        return components?.url
+        URL(string: "\(config.baseURL)/files/\(fileID)/stream")?
+            .appendingQueryItems([URLQueryItem(name: "oauth_token", value: mediaToken)])
     }
 
     private func complete<T>(
@@ -108,6 +107,15 @@ extension PutioSDK {
     ) {
         complete(completion) {
             try await self.getAccountInfo(query: query)
+        }
+    }
+
+    func addTransfer(
+        url: String,
+        _ completion: @escaping (Result<PutioTransfer, PutioSDKError>) -> Void
+    ) {
+        complete(completion) {
+            try await self.addTransfer(PutioTransferAddInput(url: url))
         }
     }
 
