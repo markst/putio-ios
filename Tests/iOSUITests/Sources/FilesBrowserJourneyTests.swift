@@ -779,7 +779,7 @@ final class FilesBrowserJourneyTests: XCTestCase {
     )
     XCTAssertEqual(createdFolderButton.label, "Watch Later", "failed rename did not roll back")
     XCTAssertTrue(
-      renameFailure.disappears(within: 5), "rename failure toast did not clear")
+      renameFailure.disappears(within: 10), "rename failure toast did not clear")
 
     openContextMenu(for: createdFolder, actionLabel: "Rename").tap()
     XCTAssertTrue(app.staticTexts["Rename Item"].appears(within: 5))

@@ -75,15 +75,17 @@ final class ComponentKitTests: XCTestCase {
     XCTAssertEqual(icons.count, PutioFileRowModel.Kind.allCases.count)
   }
 
+  func testARepeatedToastReplacesTheCurrentOne() {
+    XCTAssertNotEqual(PutioToast("Moved to Trash"), PutioToast("Moved to Trash"))
+  }
+
   func testGalleryFixturesCoverEveryVariantAxis() {
     XCTAssertEqual(
       Set(GalleryFixtures.fileRows.map(\.kind)).count,
       PutioFileRowModel.Kind.allCases.count
     )
-    XCTAssertEqual(
-      Set(GalleryFixtures.toasts.map(\.variant)).count,
-      PutioToast.Variant.allCases.count
-    )
+    XCTAssertTrue(GalleryFixtures.toasts.contains { $0.action != nil })
+    XCTAssertTrue(GalleryFixtures.toasts.contains { $0.action == nil })
     XCTAssertTrue(GalleryFixtures.fileRows.contains(where: \.isWatched))
   }
 
