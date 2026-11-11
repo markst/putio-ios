@@ -244,31 +244,88 @@ private struct TransfersPage: View {
 
 private struct StatesPage: View {
   var body: some View {
-    GallerySection(caption: "Loading") {
-      PutioLoadingStateView(title: "Loading your files")
-        .frame(height: GalleryLayout.stateTileHeight)
-    }
-    GallerySection(caption: "Empty") {
-      PutioEmptyStateView(
-        icon: .folderFill,
-        title: "No files yet",
-        message: "Files you fetch appear here.",
-        actionTitle: "Refresh",
-        action: {}
-      )
-      .frame(height: GalleryLayout.stateTileHeight)
-    }
-    GallerySection(caption: "Error") {
-      PutioErrorStateView(
-        title: "Could not load files",
-        message: "The request timed out.",
-        retryTitle: "Retry",
-        retry: {}
-      )
-      .frame(height: GalleryLayout.stateTileHeight)
-    }
+    #if os(tvOS)
+      TVStatesPage()
+    #else
+      GallerySection(caption: "Loading") {
+        PutioLoadingStateView.files
+          .frame(height: GalleryLayout.stateTileHeight)
+      }
+      GallerySection(caption: "Empty folder") {
+        PutioEmptyStateView.folder {}
+          .frame(height: GalleryLayout.stateTileHeight)
+      }
+      GallerySection(caption: "Empty history") {
+        PutioEmptyStateView.history
+          .frame(height: GalleryLayout.stateTileHeight)
+      }
+      GallerySection(caption: "Error") {
+        PutioErrorStateView(kind: .failed) {}
+          .frame(height: GalleryLayout.stateTileHeight)
+      }
+      GallerySection(caption: "Offline") {
+        VStack(spacing: GalleryLayout.itemGap) {
+          PutioOfflineBanner()
+          PutioFileRow(GalleryFixtures.onDeviceRow)
+          PutioErrorStateView(kind: .offline) {}
+            .frame(height: GalleryLayout.stateTileHeight)
+        }
+      }
+      GallerySection(caption: "Next page loading") {
+        VStack(spacing: 0) {
+          GalleryLoadedRows()
+          PutioNextPageLoadingFooter()
+        }
+      }
+      GallerySection(caption: "Next page failed") {
+        VStack(spacing: 0) {
+          GalleryLoadedRows()
+          PutioNextPageFailedFooter.files {}
+        }
+      }
+    #endif
   }
 }
+
+#if !os(tvOS)
+  private struct GalleryLoadedRows: View {
+    var body: some View {
+      ForEach(GalleryFixtures.loadedRows, id: \.name) { model in
+        PutioFileRow(model)
+      }
+    }
+  }
+#endif
+
+#if os(tvOS)
+  private struct TVStatesPage: View {
+    var body: some View {
+      GallerySection(caption: "Loading") {
+        PutioLoadingStateView(title: "Loading your files")
+          .frame(height: GalleryLayout.stateTileHeight)
+      }
+      GallerySection(caption: "Empty") {
+        PutioEmptyStateView(
+          icon: .folderFill,
+          title: "No files yet",
+          message: "Files you fetch appear here.",
+          actionTitle: "Refresh",
+          action: {}
+        )
+        .frame(height: GalleryLayout.stateTileHeight)
+      }
+      GallerySection(caption: "Error") {
+        PutioErrorStateView(
+          title: "Could not load files",
+          message: "The request timed out.",
+          retryTitle: "Retry",
+          retry: {}
+        )
+        .frame(height: GalleryLayout.stateTileHeight)
+      }
+    }
+  }
+#endif
 
 private struct FeedbackPage: View {
   var body: some View {
@@ -387,6 +444,30 @@ enum GalleryFixtures {
 
   static let folderRow = PutioFileRowModel(name: "Séries télé 🎬", kind: .folder)
 
+  #if !os(tvOS)
+    static let onDeviceRow = PutioFileRowModel(
+      name: "Big_Buck_Bunny_1080_10s_30MB.mp4",
+      kind: .video,
+      sizeText: "31 MB",
+      isWatched: true
+    )
+
+    static let loadedRows = [
+      PutioFileRowModel(
+        name: "Blue.Lights.S04E01.1080p.HDTV.H264-ORGANiC.mkv",
+        kind: .video,
+        sizeText: "3.2 GB"
+      ),
+      PutioFileRowModel(
+        name: "Blue.Lights.S04E02.1080p.HDTV.H264-ORGANiC.mkv",
+        kind: .video,
+        sizeText: "3.3 GB",
+        isWatched: true
+      ),
+      PutioFileRowModel(name: "Blue.Lights.S04E01.en.srt", kind: .file, sizeText: "41 kB"),
+    ]
+  #endif
+
   static let toasts = [
     PutioToast(variant: .neutral, title: "Copied link"),
     PutioToast(variant: .success, title: "Download finished", message: "So What.flac is offline."),
@@ -444,7 +525,7 @@ enum GalleryLayout {
     static let sectionGap = PutioTheme.Spacing.space4
     static let itemGap = PutioTheme.Spacing.space3
     static let pagePadding = PutioTheme.Spacing.space3
-    static let stateTileHeight = PutioTheme.Spacing.space6 * 2
+    static let stateTileHeight = PutioTheme.Spacing.space5 * 5
     static let containerViewportHeight = PutioTheme.Spacing.space6 * 7
     // The scaffold previews inside a scroll page rather than a real sheet,
     // so give it the surface a system sheet would provide.

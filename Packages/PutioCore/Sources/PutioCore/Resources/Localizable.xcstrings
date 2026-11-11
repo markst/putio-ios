@@ -100,6 +100,17 @@
         }
       }
     },
+    "Completed transfers and shared files will appear here." : {
+      "comment" : "android: mobile_history_empty_message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed transfers and shared files will appear here."
+          }
+        }
+      }
+    },
     "Continue from %@" : {
       "comment" : "android: playback_resume_title | differs: iOS board wording",
       "localizations" : {
@@ -430,6 +441,28 @@
         }
       }
     },
+    "Couldn’t load more files." : {
+      "comment" : "android: mobile_files_paging_error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load more files."
+          }
+        }
+      }
+    },
+    "Couldn’t load this" : {
+      "comment" : "android: mobile_state_error_title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load this"
+          }
+        }
+      }
+    },
     "Crash reports, error details, and limited playback diagnostics, so we can fix problems." : {
       "comment" : "android: privacy_diagnostics_description",
       "localizations" : {
@@ -437,6 +470,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Crash reports, error details, and limited playback diagnostics, so we can fix problems."
+          }
+        }
+      }
+    },
+    "Create folder" : {
+      "comment" : "android: mobile_files_new_folder | differs: iOS board wording",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create folder"
           }
         }
       }
@@ -762,6 +806,28 @@
         }
       }
     },
+    "Loading files" : {
+      "comment" : "android: mobile_files_loading",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading files"
+          }
+        }
+      }
+    },
+    "Maybe you’d like to create a new folder?" : {
+      "comment" : "android: mobile_files_empty_message | differs: iOS board wording, as on web",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maybe you’d like to create a new folder?"
+          }
+        }
+      }
+    },
     "Move %lld items to Trash?" : {
       "comment" : "ios-only: no Android string for the shared file actions and sorting",
       "localizations" : {
@@ -874,6 +940,28 @@
         }
       }
     },
+    "No files whatsoever!" : {
+      "comment" : "android: mobile_files_empty_title | differs: iOS board wording, as on web",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No files whatsoever!"
+          }
+        }
+      }
+    },
+    "No history yet" : {
+      "comment" : "android: mobile_history_empty_title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No history yet"
+          }
+        }
+      }
+    },
     "No sign-in is in progress." : {
       "comment" : "ios-only: no Android string for the shared session errors",
       "localizations" : {
@@ -881,6 +969,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No sign-in is in progress."
+          }
+        }
+      }
+    },
+    "Offline. Showing what’s on this iPhone." : {
+      "comment" : "android: mobile_files_offline_banner | differs: iOS board names the iPhone",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline. Showing what’s on this iPhone."
           }
         }
       }
@@ -969,6 +1068,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "put.io did not return an activation code. Try again."
+          }
+        }
+      }
+    },
+    "put.io is out of reach" : {
+      "comment" : "android: mobile_files_offline_title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "put.io is out of reach"
           }
         }
       }
@@ -1380,6 +1490,17 @@
         }
       }
     },
+    "Try again" : {
+      "comment" : "android: mobile_action_retry",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
+    },
     "Try signing out again" : {
       "comment" : "ios-only: no Android string for the shared session errors",
       "localizations" : {
@@ -1508,6 +1629,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "You can restore this item from Trash."
+          }
+        }
+      }
+    },
+    "Your connection dropped, or we did. Retrying on its own." : {
+      "comment" : "android: mobile_files_offline_message",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your connection dropped, or we did. Retrying on its own."
           }
         }
       }

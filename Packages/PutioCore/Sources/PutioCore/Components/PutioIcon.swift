@@ -13,11 +13,13 @@ public enum PutioIcon: String, CaseIterable, Sendable {
   case fileAudio = "file-audio-regular"
   case fileVideo = "file-video-regular"
   case folderFill = "folder-fill"
+  case folderSimplePlus = "folder-simple-plus-regular"
   case image = "image-regular"
   case info = "info-regular"
   case trash = "trash-regular"
   case userCircle = "user-circle-regular"
   case warningCircle = "warning-circle-regular"
+  case wifiSlash = "wifi-slash-regular"
   case xCircle = "x-circle-regular"
 }
 
