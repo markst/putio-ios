@@ -4,6 +4,9 @@
 # PUTIO_* build settings the release Environment provides.
 #
 #   scripts/archive-ios.sh <marketing-version> <build-number> <ipa-path> <dsym-dir>
+#
+# Also needs PUTIO_PROVISIONING_PROFILE_UUID and PUTIO_SHARE_PROVISIONING_PROFILE_UUID:
+# the app and its share extension (PUTIO_APP_IDENTIFIER.share) sign separately.
 set -euo pipefail
 
 if [ "$#" -ne 4 ]; then
@@ -19,6 +22,7 @@ dsym_dir="$4"
 
 : "${PUTIO_APP_IDENTIFIER:?}" "${PUTIO_DEVELOPMENT_TEAM:?}" "${PUTIO_PRIMARY_APP_ICON:?}"
 profile="${PUTIO_PROVISIONING_PROFILE_UUID:?}"
+share_profile="${PUTIO_SHARE_PROVISIONING_PROFILE_UUID:?}"
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
@@ -31,6 +35,7 @@ settings=(
   "CODE_SIGN_IDENTITY=Apple Distribution"
   "DEVELOPMENT_TEAM=$PUTIO_DEVELOPMENT_TEAM"
   "PUTIO_PROVISIONING_PROFILE_SPECIFIER=$profile"
+  "PUTIO_SHARE_PROVISIONING_PROFILE_SPECIFIER=$share_profile"
 )
 for name in PUTIO_APP_IDENTIFIER PUTIO_PRIMARY_APP_ICON PUTIO_DEVELOPMENT_TEAM PUTIO_OAUTH_CLIENT_ID \
   PUTIO_CHROMECAST_RECEIVER_APP_ID PUTIO_INTERCOM_API_KEY PUTIO_INTERCOM_APP_ID PUTIO_SENTRY_DSN; do
@@ -52,6 +57,8 @@ cat > "$work/ExportOptions.plist" <<PLIST
   <dict>
     <key>$PUTIO_APP_IDENTIFIER</key>
     <string>$profile</string>
+    <key>$PUTIO_APP_IDENTIFIER.share</key>
+    <string>$share_profile</string>
   </dict>
 </dict>
 </plist>

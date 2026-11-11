@@ -26,6 +26,7 @@ const run = (command: string, args: string[], options: { cwd?: string; env?: Nod
 const TEAM = "TEAM123456";
 const BUNDLE = "com.example.app";
 const UUID = "12345678-1234-1234-1234-123456789ABC";
+const SHARE_UUID = "87654321-4321-4321-4321-CBA987654321";
 
 // A throwaway self-signed signer stands in for Apple's: the checker reads the
 // payload and never trusts the signature.
@@ -79,8 +80,8 @@ const profile = async (dir: string, fields: Profile) => {
   return { id: fields.uuid ?? UUID, type: "profiles", attributes: { name: `profile ${fields.uuid ?? UUID}`, profileContent: signed.stdout.toString("base64") } };
 };
 
-const listing = async (dir: string, profiles: unknown[]) => {
-  const path = join(dir, "profiles.json");
+const listing = async (dir: string, profiles: unknown[], file = "profiles.json") => {
+  const path = join(dir, file);
   await writeFile(path, JSON.stringify({ data: profiles }));
   return path;
 };
@@ -163,18 +164,20 @@ test("install-signing exports the picked profile, keeps its secrets private, and
   const dir = await tempDir(t);
   await signer(dir);
   const identity = await certificate(dir, "identity");
-  const profiles = await listing(dir, [await profile(dir, { certificate: identity.base64 })]);
+  const appProfile = await profile(dir, { certificate: identity.base64 });
+  const profiles = await listing(dir, [appProfile, await profile(dir, { certificate: identity.base64, application: `${TEAM}.${BUNDLE}.share`, uuid: SHARE_UUID })]);
+  const appOnly = await listing(dir, [appProfile], "app-only.json");
   const runnerTemp = join(dir, "runner");
   await mkdir(runnerTemp);
   await writeFile(join(dir, "asc"), fakeAsc);
   await chmod(join(dir, "asc"), 0o755);
 
-  const install = async (team: string, sha256: string, fails = "") => {
+  const install = async (team: string, sha256: string, fails = "", listingPath = profiles) => {
     for (const file of ["env", "asc.log", "modes.log"]) await writeFile(join(dir, file), "");
     const result = run("bash", [script("install-signing.sh")], {
       env: {
         PATH: `${dir}:${process.env.PATH}`, ASC_LOG: join(dir, "asc.log"), MODE_LOG: join(dir, "modes.log"),
-        FAKE_TEAM: team, FAKE_SHA256: sha256, FAKE_LISTING: profiles, FAKE_INSTALL_FAILS: fails,
+        FAKE_TEAM: team, FAKE_SHA256: sha256, FAKE_LISTING: listingPath, FAKE_INSTALL_FAILS: fails,
         APPLE_DISTRIBUTION_P12: Buffer.from("synthetic p12").toString("base64"), APPLE_DISTRIBUTION_P12_PASSWORD: "canary-password",
         PUTIO_APP_IDENTIFIER: BUNDLE, PUTIO_DEVELOPMENT_TEAM: TEAM, RUNNER_TEMP: runnerTemp, GITHUB_ENV: join(dir, "env"),
       },
@@ -186,10 +189,11 @@ test("install-signing exports the picked profile, keeps its secrets private, and
   const installed = await install(TEAM, identity.sha256);
   assert.equal(installed.status, 0, installed.stderr);
   assert.match(installed.env, new RegExp(`^PUTIO_PROVISIONING_PROFILE_UUID=${UUID}$`, "m"));
+  assert.match(installed.env, new RegExp(`^PUTIO_SHARE_PROVISIONING_PROFILE_UUID=${SHARE_UUID}$`, "m"));
   assert.match(installed.env, /^PUTIO_SIGNING_CERTIFICATE_SHA1=ABCDEF$/m);
   assert.match(installed.calls, /^signing keychain install .*--add-to-search-list/m, "codesign finds the identity only through the search list");
   assert.match(installed.calls, /profiles list --profile-type IOS_APP_STORE --profile-state ACTIVE .*--paginate/);
-  assert.match(installed.calls, /profiles local install --path /);
+  assert.equal(installed.calls.match(/^profiles local install --path /gm)?.length, 2, "the app and the share extension each install a profile");
   assert.doesNotMatch(installed.calls, /--create-missing|--delete-stale-profiles|profiles (create|delete)|certificates/, "never changes App Store Connect");
   assert.doesNotMatch(installed.stdout + installed.stderr + installed.calls + installed.env, /canary-password/);
   assert.deepEqual(installed.modes.trim().split("\n"), ["-rw-------", "-rw-------", "-rw-------"], "the p12 and both passwords are owner-only");
@@ -209,6 +213,10 @@ test("install-signing exports the picked profile, keeps its secrets private, and
   assert.equal(unmatched.status, 1, "a profile without the identity's certificate is not installed");
   assert.doesNotMatch(unmatched.calls, /profiles local install/);
   assert.doesNotMatch(unmatched.env, /PUTIO_PROVISIONING_PROFILE_UUID/);
+
+  const noShareProfile = await install(TEAM, identity.sha256, "", appOnly);
+  assert.equal(noShareProfile.status, 1, "a release without the share extension's profile stops before archiving");
+  assert.doesNotMatch(noShareProfile.env, /PUTIO_SHARE_PROVISIONING_PROFILE_UUID|PUTIO_PROVISIONING_PROFILE_UUID/);
 });
 
 test("the signing check is a dispatch-only release job on protected main", async () => {

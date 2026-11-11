@@ -421,6 +421,8 @@ while [ "$#" -gt 0 ]; do
 done
 `;
 
+const SHARE_UUID = "87654321-4321-4321-4321-CBA987654321";
+
 const archiveFixture = async (t: test.TestContext) => {
   const dir = await tempDir(t);
   await writeFile(join(dir, "xcodebuild"), fakeXcodebuild);
@@ -440,7 +442,7 @@ const archiveFixture = async (t: test.TestContext) => {
 
 test("the archive keeps every dSYM after it removes the xcarchive", async (t) => {
   const { dir, run } = await archiveFixture(t);
-  const result = run({ PUTIO_PROVISIONING_PROFILE_UUID: "12345678-1234-1234-1234-123456789ABC" });
+  const result = run({ PUTIO_PROVISIONING_PROFILE_UUID: "12345678-1234-1234-1234-123456789ABC", PUTIO_SHARE_PROVISIONING_PROFILE_UUID: SHARE_UUID });
   assert.equal(result.status, 0, result.stderr);
   const archivePath = /-archivePath (\S+)/.exec(await readFile(join(dir, "xcodebuild.log"), "utf8"))?.[1];
   assert.ok(archivePath);
@@ -451,7 +453,7 @@ test("the archive keeps every dSYM after it removes the xcarchive", async (t) =>
 
 test("the archive stops before export when the app links a framework it doesn't embed", async (t) => {
   const { dir, run } = await archiveFixture(t);
-  const result = run({ PUTIO_PROVISIONING_PROFILE_UUID: "12345678-1234-1234-1234-123456789ABC", FAKE_LINKED_FRAMEWORKS: "RealmSwift" });
+  const result = run({ PUTIO_PROVISIONING_PROFILE_UUID: "12345678-1234-1234-1234-123456789ABC", PUTIO_SHARE_PROVISIONING_PROFILE_UUID: SHARE_UUID, FAKE_LINKED_FRAMEWORKS: "RealmSwift" });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /links @rpath\/RealmSwift\.framework\/RealmSwift but does not embed it/);
   assert.doesNotMatch(await readFile(join(dir, "xcodebuild.log"), "utf8"), /-exportArchive/);
@@ -460,17 +462,23 @@ test("the archive stops before export when the app links a framework it doesn't 
 test("the archive signs and exports with the profile install-signing.sh checked", async (t) => {
   const { dir, run: archive } = await archiveFixture(t);
 
-  const missing = archive({});
+  const missing = archive({ PUTIO_SHARE_PROVISIONING_PROFILE_UUID: SHARE_UUID });
   assert.notEqual(missing.status, 0);
   assert.match(missing.stderr, /PUTIO_PROVISIONING_PROFILE_UUID/, "an archive without the checked profile stops before xcodebuild");
+  const missingShare = archive({ PUTIO_PROVISIONING_PROFILE_UUID: "12345678-1234-1234-1234-123456789ABC" });
+  assert.notEqual(missingShare.status, 0);
+  assert.match(missingShare.stderr, /PUTIO_SHARE_PROVISIONING_PROFILE_UUID/, "an archive without the share extension's profile stops before xcodebuild");
 
   const uuid = "12345678-1234-1234-1234-123456789ABC";
-  const signed = archive({ PUTIO_PROVISIONING_PROFILE_UUID: uuid });
+  const signed = archive({ PUTIO_PROVISIONING_PROFILE_UUID: uuid, PUTIO_SHARE_PROVISIONING_PROFILE_UUID: SHARE_UUID });
   assert.equal(signed.status, 0, signed.stderr);
   const log = await readFile(join(dir, "xcodebuild.log"), "utf8");
   assert.match(log, new RegExp(`archive.*PUTIO_PROVISIONING_PROFILE_SPECIFIER=${uuid}|PUTIO_PROVISIONING_PROFILE_SPECIFIER=${uuid}.*archive`));
+  assert.match(log, new RegExp(`PUTIO_SHARE_PROVISIONING_PROFILE_SPECIFIER=${SHARE_UUID}`));
   assert.doesNotMatch(log, /(^| )PROVISIONING_PROFILE_SPECIFIER=/m, "a command-line profile would also reach the package targets");
-  assert.match(await readFile(join(dir, "ExportOptions.plist"), "utf8"), new RegExp(`<key>com\\.example\\.app</key>\\s*<string>${uuid}</string>`));
+  const exportOptions = await readFile(join(dir, "ExportOptions.plist"), "utf8");
+  assert.match(exportOptions, new RegExp(`<key>com\\.example\\.app</key>\\s*<string>${uuid}</string>`));
+  assert.match(exportOptions, new RegExp(`<key>com\\.example\\.app\\.share</key>\\s*<string>${SHARE_UUID}</string>`));
 });
 
 test("screenshots upload the listing after a failed Plan, but don't validate again", async () => {
