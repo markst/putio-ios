@@ -55,8 +55,7 @@ enum PutioE2ELargeFixture {
 
         let path = url.path
         if path == "/v2/files/list" {
-            let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
-            let parentID = query.first(where: { $0.name == "parent_id" })?.value.flatMap(Int.init) ?? 0
+            let parentID = url.queryValue("parent_id").flatMap(Int.init) ?? 0
             return listing(parentID: parentID)
         }
 

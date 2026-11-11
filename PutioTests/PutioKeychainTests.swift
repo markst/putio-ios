@@ -751,6 +751,22 @@ final class DeeplinkManagerTests: XCTestCase {
         XCTAssertEqual(tabBarController.selectedIndex, 0, "the check changed the visible screen")
     }
 
+    func testOnlyTransferLinksReachTheTransferHandler() throws {
+        let manager = DeeplinkManager()
+        manager.tabBarController = makeTabBarController()
+        var received: [TransferLink.Incoming] = []
+        manager.transferLinkHandler = { received.append($0) }
+        let magnet = try XCTUnwrap(URL(string: "magnet:?xt=urn:btih:abc"))
+
+        XCTAssertFalse(manager.handleURL(url: magnet), "a manager that is not ready")
+        manager.isReadyToHandleURL = true
+        XCTAssertTrue(manager.handleURL(url: magnet))
+        XCTAssertTrue(manager.handleURL(url: try XCTUnwrap(URL(string: "putio://transfers/add"))))
+        XCTAssertFalse(manager.handleURL(url: try XCTUnwrap(URL(string: "https://put.io/transfers/add?url=https%3A%2F%2Fexample.com%2Fa"))))
+
+        XCTAssertEqual(received, [.link(try XCTUnwrap(TransferLink.parse("magnet:?xt=urn:btih:abc"))), .unsupported])
+    }
+
     func testTabIconsDoNotDependOnLocalizedTitles() throws {
         let tabBarController = makeTabBarController()
         let items = try XCTUnwrap(tabBarController.tabBar.items)

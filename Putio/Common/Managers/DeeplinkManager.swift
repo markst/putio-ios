@@ -9,6 +9,9 @@ class DeeplinkManager {
     weak var tabBarController: MainTabBarController?
     var isReadyToHandleURL: Bool = false
     var diagnosticsCheck: () -> Bool = { SentryTelemetry.captureDiagnosticsCheck() }
+    var transferLinkHandler: (TransferLink.Incoming) -> Void = { incoming in
+        TransferAddPresenter.present(incoming, from: DeeplinkManager.sharedInstance.tabBarController)
+    }
 
     func setup(with tabBarController: MainTabBarController) {
         self.tabBarController = tabBarController
@@ -76,6 +79,11 @@ class DeeplinkManager {
 
     func handleURL(url: URL) -> Bool {
         guard isReadyToHandleURL else { return false }
+
+        if let incoming = TransferLink.incoming(url) {
+            transferLinkHandler(incoming)
+            return true
+        }
 
         let path = Self.routePath(of: url)
 

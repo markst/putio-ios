@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # Installs the App Store distribution identity into a new keychain, and the
-# active App Store profile check-signing-profile.ts picks for that identity and
-# PUTIO_APP_IDENTIFIER. CI-only, on macOS,
+# active App Store profiles check-signing-profile.ts picks for that identity:
+# one for PUTIO_APP_IDENTIFIER and one for the share extension,
+# PUTIO_APP_IDENTIFIER.share. CI-only, on macOS,
 # with the pinned asc on PATH. Creates and revokes nothing in App Store Connect.
 #
 # Reads APPLE_DISTRIBUTION_P12 (base64 PKCS#12), APPLE_DISTRIBUTION_P12_PASSWORD,
 # PUTIO_APP_IDENTIFIER, PUTIO_DEVELOPMENT_TEAM, and asc's ASC_* key variables.
-# Appends PUTIO_SIGNING_KEYCHAIN, PUTIO_SIGNING_CERTIFICATE_SHA1 and
-# PUTIO_PROVISIONING_PROFILE_UUID to GITHUB_ENV for archive-ios.sh.
+# Appends PUTIO_SIGNING_KEYCHAIN, PUTIO_SIGNING_CERTIFICATE_SHA1,
+# PUTIO_PROVISIONING_PROFILE_UUID and PUTIO_SHARE_PROVISIONING_PROFILE_UUID to
+# GITHUB_ENV for archive-ios.sh.
 set -euo pipefail
 
 : "${APPLE_DISTRIBUTION_P12:?}" "${APPLE_DISTRIBUTION_P12_PASSWORD:?}"
@@ -51,8 +53,14 @@ uuid="$(node "$(dirname "$0")/check-signing-profile.ts" "$work/profiles.json" "$
   "$PUTIO_APP_IDENTIFIER" "$PUTIO_DEVELOPMENT_TEAM" "$profile")"
 asc profiles local install --path "$profile" --output json > /dev/null
 
+share_profile="$work/Share.mobileprovision"
+share_uuid="$(node "$(dirname "$0")/check-signing-profile.ts" "$work/profiles.json" "$certificate_sha256" \
+  "$PUTIO_APP_IDENTIFIER.share" "$PUTIO_DEVELOPMENT_TEAM" "$share_profile")"
+asc profiles local install --path "$share_profile" --output json > /dev/null
+
 {
   echo "PUTIO_SIGNING_CERTIFICATE_SHA1=$certificate_sha1"
   echo "PUTIO_PROVISIONING_PROFILE_UUID=$uuid"
+  echo "PUTIO_SHARE_PROVISIONING_PROFILE_UUID=$share_uuid"
 } >> "$GITHUB_ENV"
-echo "installed certificate $certificate_sha256 and profile $uuid for $PUTIO_APP_IDENTIFIER"
+echo "installed certificate $certificate_sha256 and profiles $uuid, $share_uuid for $PUTIO_APP_IDENTIFIER"

@@ -11,6 +11,13 @@
 		5A0F0000000000000000030B /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5A0F0000000000000000020B /* RealmSwift */; };
 		5A0F0000000000000000030C /* GoogleCastDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 5A0F0000000000000000020C /* GoogleCastDynamic */; };
 		5A0F00000000000000000406 /* AcknowledgementsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000405 /* AcknowledgementsTests.swift */; };
+		5A0F00000000000000000512 /* TransferAddPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000511 /* TransferAddPresenter.swift */; };
+		5A0F00000000000000000514 /* TransferLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000513 /* TransferLink.swift */; };
+		5A0F0000000000000000050C /* TransferLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000513 /* TransferLink.swift */; };
+		5A0F00000000000000000517 /* TransferLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000516 /* TransferLinkTests.swift */; };
+		5A0F0000000000000000050B /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F0000000000000000050A /* ShareViewController.swift */; };
+		5A0F0000000000000000051A /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000519 /* en.lproj */; };
+		5A0F0000000000000000050F /* PutioShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000502 /* PutioShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5A0F00000000000000000301 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 5A0F00000000000000000201 /* Sentry-Dynamic */; };
 		5A0F00000000000000000302 /* Intercom in Frameworks */ = {isa = PBXBuildFile; productRef = 5A0F00000000000000000202 /* Intercom */; };
 		5A0F00000000000000000303 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 5A0F00000000000000000203 /* PostHog */; };
@@ -154,6 +161,8 @@
 		10A000000000000000000001 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10A000000000000000000002 /* Log.swift */; };
 		ACB8168920566475008F1D3E /* DownloadsTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB8168820566475008F1D3E /* DownloadsTutorialViewController.swift */; };
 		ACB8168D20567A21008F1D3E /* downloadsTutorial.mov in Resources */ = {isa = PBXBuildFile; fileRef = ACB8168C20567A20008F1D3E /* downloadsTutorial.mov */; };
+		5A0F00000000000000000531 /* URL+Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000530 /* URL+Query.swift */; };
+		5A0F00000000000000000532 /* URL+Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F00000000000000000530 /* URL+Query.swift */; };
 		ACB8E04B1FC45926003DFF4F /* Bundle+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB8E04A1FC45926003DFF4F /* Bundle+Info.swift */; };
 		ACBAF58B1FB097ED00BEDE1D /* UIColor+Putio.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBAF58A1FB097ED00BEDE1D /* UIColor+Putio.swift */; };
 		ACBAF5991FB0B1FF00BEDE1D /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBAF5981FB0B1FF00BEDE1D /* SettingsTableViewController.swift */; };
@@ -211,6 +220,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5A0F0000000000000000050D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ACEF62E21F9A26AA0026B25E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5A0F00000000000000000501;
+			remoteInfo = PutioShare;
+		};
 		DAA7E1BF696508B0A4609856 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ACEF62E21F9A26AA0026B25E /* Project object */;
@@ -239,9 +255,27 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5A0F00000000000000000510 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5A0F0000000000000000050F /* PutioShare.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5A0F00000000000000000502 /* PutioShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PutioShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0F00000000000000000511 /* TransferAddPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferAddPresenter.swift; sourceTree = "<group>"; };
+		5A0F00000000000000000513 /* TransferLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferLink.swift; sourceTree = "<group>"; };
+		5A0F00000000000000000516 /* TransferLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferLinkTests.swift; sourceTree = "<group>"; };
+		5A0F0000000000000000050A /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		5A0F00000000000000000518 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A0F00000000000000000519 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 		5A0F00000000000000000405 /* AcknowledgementsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsTests.swift; sourceTree = "<group>"; };
 		5A0F00000000000000000401 /* Acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Acknowledgements.plist; sourceTree = "<group>"; };
 		5A0F00000000000000000403 /* AcknowledgementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsViewController.swift; sourceTree = "<group>"; };
@@ -373,6 +407,7 @@
 		10A000000000000000000002 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		ACB8168820566475008F1D3E /* DownloadsTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsTutorialViewController.swift; sourceTree = "<group>"; };
 		ACB8168C20567A20008F1D3E /* downloadsTutorial.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = downloadsTutorial.mov; sourceTree = "<group>"; };
+		5A0F00000000000000000530 /* URL+Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Query.swift"; sourceTree = "<group>"; };
 		ACB8E04A1FC45926003DFF4F /* Bundle+Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Info.swift"; sourceTree = "<group>"; };
 		ACBAF58A1FB097ED00BEDE1D /* UIColor+Putio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Putio.swift"; sourceTree = "<group>"; };
 		ACBAF5981FB0B1FF00BEDE1D /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
@@ -442,6 +477,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5A0F00000000000000000504 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9BB6B6CBE9C835D0DD57455D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -480,6 +522,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A0F00000000000000000509 /* PutioShare */ = {
+			isa = PBXGroup;
+			children = (
+				5A0F0000000000000000050A /* ShareViewController.swift */,
+				5A0F00000000000000000518 /* Info.plist */,
+				5A0F00000000000000000519 /* en.lproj */,
+			);
+			path = PutioShare;
+			sourceTree = "<group>";
+		};
+		5A0F00000000000000000515 /* Transfers */ = {
+			isa = PBXGroup;
+			children = (
+				5A0F00000000000000000511 /* TransferAddPresenter.swift */,
+			);
+			path = Transfers;
+			sourceTree = "<group>";
+		};
 		23057B4F8E5BE300D7880600 /* PutioTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -500,6 +560,7 @@
 				109100000000000000000002 /* DownloadQueueControllerTests.swift */,
 				7A112233445566778899AABC /* NavigationLocalizationTests.swift */,
 				9061977704DB05372D01A172 /* PutioKeychainTests.swift */,
+				5A0F00000000000000000516 /* TransferLinkTests.swift */,
 				E635BD2FC5C6F52E07A922B3 /* PutioRealmTests.swift */,
 				293907FB8C6DC1B35D3AD1E0 /* UserConfigTests.swift */,
 				36EED087A518DE50908A5982 /* MediaPreviewTests.swift */,
@@ -634,6 +695,7 @@
 				C0EE00F65FA10D0FF5B80740 /* PerfSignpost.swift */,
 				AC0FC8BE1FC2D6DF002E775B /* Utils.swift */,
 				AC6546521FAB2CF100E278EE /* Keychain.swift */,
+				5A0F00000000000000000513 /* TransferLink.swift */,
 				ACCE5D2A1FF11067007E811B /* NetworkReachability.swift */,
 				ACB7637024B3B439007289DA /* Debouncer.swift */,
 				54B45BFE24B989083E180F82 /* InternalFailurePresenter.swift */,
@@ -651,6 +713,7 @@
 				AC76E0271FB4D68800693A18 /* UITableView+HeaderFooter.swift */,
 				AC76E0291FB4D6A100693A18 /* UITableViewCell+Appearance.swift */,
 				ACB8E04A1FC45926003DFF4F /* Bundle+Info.swift */,
+				5A0F00000000000000000530 /* URL+Query.swift */,
 				AC0FC8BC1FC2D18B002E775B /* String+Truncate.swift */,
 				AC1B592223B7EDCB00CDAF1D /* String+Slugify.swift */,
 				ACBAF58A1FB097ED00BEDE1D /* UIColor+Putio.swift */,
@@ -722,6 +785,7 @@
 				ACAA622523BD03F30043458C /* History */,
 				ACAA622623BD04010043458C /* Settings */,
 				ACF5681027856DCD00A84B88 /* Trash */,
+				5A0F00000000000000000515 /* Transfers */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -873,6 +937,7 @@
 			children = (
 				ACF0C0052B0F000100C0F001 /* Config */,
 				ACEF62EC1F9A26AA0026B25E /* Putio */,
+				5A0F00000000000000000509 /* PutioShare */,
 				ACEF62EB1F9A26AA0026B25E /* Products */,
 				30BC48A08C4548A56B8C2951 /* Frameworks */,
 				23057B4F8E5BE300D7880600 /* PutioTests */,
@@ -884,6 +949,7 @@
 			isa = PBXGroup;
 			children = (
 				ACEF62EA1F9A26AA0026B25E /* Putio.app */,
+				5A0F00000000000000000502 /* PutioShare.appex */,
 				489EA16623E8C504796F869E /* PutioTests.xctest */,
 				651F74BAFDB08F5826583B32 /* PutioUITests.xctest */,
 			);
@@ -1014,10 +1080,12 @@
 				ACEF62E81F9A26AA0026B25E /* Resources */,
 				5D6E7F8A9B0C1D2E3F4A5B6C /* Bundle Conditional Resources */,
 				5A0F00000000000000000400 /* Embed Frameworks */,
+				5A0F00000000000000000510 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5A0F0000000000000000050E /* PBXTargetDependency */,
 			);
 			name = Putio;
 			packageProductDependencies = (
@@ -1033,6 +1101,23 @@
 			productName = Putio;
 			productReference = ACEF62EA1F9A26AA0026B25E /* Putio.app */;
 			productType = "com.apple.product-type.application";
+		};
+		5A0F00000000000000000501 /* PutioShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A0F00000000000000000506 /* Build configuration list for PBXNativeTarget "PutioShare" */;
+			buildPhases = (
+				5A0F00000000000000000503 /* Sources */,
+				5A0F00000000000000000504 /* Frameworks */,
+				5A0F00000000000000000505 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PutioShare;
+			productName = PutioShare;
+			productReference = 5A0F00000000000000000502 /* PutioShare.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -1059,6 +1144,9 @@
 								enabled = 1;
 							};
 						};
+					};
+					5A0F00000000000000000501 = {
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -1087,6 +1175,7 @@
 			projectRoot = "";
 			targets = (
 				ACEF62E91F9A26AA0026B25E /* Putio */,
+				5A0F00000000000000000501 /* PutioShare */,
 				456D1D7E4FCBDF0C748CA31C /* PutioTests */,
 				7E3D7E89C82298974FA9073C /* PutioUITests */,
 			);
@@ -1136,6 +1225,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5A0F00000000000000000505 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A0F0000000000000000051A /* en.lproj in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1172,6 +1269,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5A0F00000000000000000503 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A0F0000000000000000050B /* ShareViewController.swift in Sources */,
+				5A0F0000000000000000050C /* TransferLink.swift in Sources */,
+				5A0F00000000000000000532 /* URL+Query.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43EFF5EEB74189FAD36ED431 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1193,6 +1300,7 @@
 				109100000000000000000001 /* DownloadQueueControllerTests.swift in Sources */,
 				7A112233445566778899AABB /* NavigationLocalizationTests.swift in Sources */,
 				B5E0A31A3EECB199CBAC08D0 /* PutioKeychainTests.swift in Sources */,
+				5A0F00000000000000000517 /* TransferLinkTests.swift in Sources */,
 				F5F55CEFFA917A837390DE86 /* PutioRealmTests.swift in Sources */,
 				20CA6ABE176EC66E70EC090E /* UserConfigTests.swift in Sources */,
 				73797D49E2047D4AA432BD9C /* MediaPreviewTests.swift in Sources */,
@@ -1247,6 +1355,7 @@
 				ACED3B5C1FEBC1BA0066F41A /* Constants.swift in Sources */,
 				AC7863182052C69400E26106 /* DownloadsEmptyStateView.swift in Sources */,
 				ACB8E04B1FC45926003DFF4F /* Bundle+Info.swift in Sources */,
+				5A0F00000000000000000531 /* URL+Query.swift in Sources */,
 				ACAA622D23BD0D9C0043458C /* NextMediaFinder.swift in Sources */,
 				ACB8168920566475008F1D3E /* DownloadsTutorialViewController.swift in Sources */,
 				AC6F939F1FD6F20F00B2E79F /* DownloadsTableViewCell.swift in Sources */,
@@ -1321,6 +1430,8 @@
 				ACCAE1D127A91A14007DA85F /* PutioSDK+ErrorLocalizer.swift in Sources */,
 				AC5B420B282CCF9E0025064D /* EnableTwoFactorSecretViewModel.swift in Sources */,
 				AC6546531FAB2CF100E278EE /* Keychain.swift in Sources */,
+				5A0F00000000000000000514 /* TransferLink.swift in Sources */,
+				5A0F00000000000000000512 /* TransferAddPresenter.swift in Sources */,
 				ACBAF5991FB0B1FF00BEDE1D /* SettingsTableViewController.swift in Sources */,
 				AC5D60B61FAB43D6004C1274 /* UITextField+Appearance.swift in Sources */,
 				3C5E7A9B1D2F4A6C8E0B3D5F /* UILabel+Appearance.swift in Sources */,
@@ -1361,6 +1472,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5A0F0000000000000000050E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PutioShare;
+			target = 5A0F00000000000000000501 /* PutioShare */;
+			targetProxy = 5A0F0000000000000000050D /* PBXContainerItemProxy */;
+		};
 		37A259AF61D257CD4C31C5D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Putio;
@@ -1376,6 +1493,65 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		5A0F00000000000000000507 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACF0C0012B0F000100C0F001 /* Debug.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = PutioShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PUTIO_APP_IDENTIFIER).share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(PUTIO_SHARE_PROVISIONING_PROFILE_SPECIFIER)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5A0F00000000000000000508 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACF0C0022B0F000100C0F001 /* Release.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				INFOPLIST_FILE = PutioShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PUTIO_APP_IDENTIFIER).share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(PUTIO_SHARE_PROVISIONING_PROFILE_SPECIFIER)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		2AC928AA015165B597903D24 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1725,6 +1901,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5A0F00000000000000000506 /* Build configuration list for PBXNativeTarget "PutioShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A0F00000000000000000507 /* Debug */,
+				5A0F00000000000000000508 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1C3F39EA533DCCB6F5CC4835 /* Build configuration list for PBXNativeTarget "PutioUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

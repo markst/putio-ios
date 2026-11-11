@@ -1,5 +1,5 @@
 {
-  "originHash" : "d42eb3dcdca1ac87d23b318e360db19c1ef967554dda13ae010c060126f37c49",
+  "originHash" : "e3e9173a761b2ce0081c7627bd4386ecd8c7d366b77ad4c7f8f481827196e2fb",
   "pins" : [
     {
       "identity" : "google-cast-ios-sdk",
@@ -92,15 +92,6 @@
       }
     },
     {
-      "identity" : "swift-issue-reporting",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-issue-reporting",
-      "state" : {
-        "revision" : "b23bb4493c439d3e05152bc167014235ba3d47fc",
-        "version" : "2.1.2"
-      }
-    },
-    {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
@@ -116,6 +107,15 @@
       "state" : {
         "revision" : "050f1a346fbbac0ca2cfb15a95274f7bd1cf0ccf",
         "version" : "604.0.0"
+      }
+    },
+    {
+      "identity" : "xctest-dynamic-overlay",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
+      "state" : {
+        "revision" : "d9308ad679143c26a30dec52daefe82f54af2b82",
+        "version" : "1.13.1"
       }
     }
   ],
