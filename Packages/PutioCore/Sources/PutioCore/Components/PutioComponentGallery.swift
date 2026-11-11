@@ -24,8 +24,12 @@ public struct PutioComponentGallery: View {
 
     // List- and Form-backed pages have no intrinsic height, so snapshots
     // render them at a fixed viewport instead of the fitted size.
-    var usesContainerViewport: Bool {
-      self == .files || self == .forms
+    var containerViewportHeight: CGFloat? {
+      switch self {
+      case .files: GalleryLayout.containerViewportHeight
+      case .forms: GalleryLayout.formsViewportHeight
+      case .buttons, .transfers, .states, .feedback: nil
+      }
     }
   }
 
@@ -47,13 +51,11 @@ public struct PutioComponentGallery: View {
 
   public static func snapshotContent(page: Page) -> some View {
     GalleryPageView(page: page)
-      .frame(
-        maxHeight: page.usesContainerViewport ? GalleryLayout.containerViewportHeight : nil
-      )
+      .frame(maxHeight: page.containerViewportHeight)
   }
 
   public static func snapshotViewportHeight(page: Page) -> CGFloat? {
-    page.usesContainerViewport ? GalleryLayout.containerViewportHeight : nil
+    page.containerViewportHeight
   }
 }
 
@@ -293,10 +295,12 @@ private struct FormsGallery: View {
   @State private var name = "incoming"
   // periphery:ignore
   @State private var invalid = ""
-  // periphery:ignore
-  @State private var usesTrash = true
-  // periphery:ignore
-  @State private var route = "Frankfurt"
+  #if os(tvOS)
+    // periphery:ignore
+    @State private var usesTrash = true
+    // periphery:ignore
+    @State private var route = "Frankfurt"
+  #endif
 
   var body: some View {
     #if os(tvOS)
@@ -309,63 +313,137 @@ private struct FormsGallery: View {
         .padding(GalleryLayout.pagePadding)
       }
     #else
-      Form {
-        Section {
-          PutioFormField(label: "Folder name", placeholder: "Folder name", text: $name)
-          PutioFormField(
-            label: "Receiver app ID",
-            placeholder: "Required",
-            text: $invalid,
-            errorText: "Enter a receiver app ID."
-          )
-        } header: {
-          GalleryTitle(page: .forms)
-        }
-        .listRowBackground(PutioTheme.Colors.surface)
-        Section {
-          PutioToggleRow(
-            title: "Use trash",
-            subtitle: "Deleted files stay in trash for a week",
-            isOn: $usesTrash
-          )
-          PutioPickerRow(
-            title: "Tunnel route",
-            selection: $route,
-            options: GalleryFixtures.routes
-          ) { $0 }
-        }
-        .listRowBackground(PutioTheme.Colors.surface)
-      }
-      .scrollContentBackground(.hidden)
+      SettingsRowsGallery(name: $name, invalid: $invalid)
     #endif
   }
 
-  @ViewBuilder private var formRows: some View {
-    GallerySection(caption: "Field") {
-      PutioFormField(label: "Folder name", placeholder: "Folder name", text: $name)
-      PutioFormField(
-        label: "Receiver app ID",
-        placeholder: "Required",
-        text: $invalid,
-        errorText: "Enter a receiver app ID."
-      )
+  #if os(tvOS)
+    @ViewBuilder private var formRows: some View {
+      GallerySection(caption: "Field") {
+        PutioFormField(label: "Folder name", placeholder: "Folder name", text: $name)
+        PutioFormField(
+          label: "Receiver app ID",
+          placeholder: "Required",
+          text: $invalid,
+          errorText: "Enter a receiver app ID."
+        )
+      }
+      GallerySection(caption: "Toggle row") {
+        PutioToggleRow(
+          title: "Use trash",
+          subtitle: "Deleted files stay in trash for a week",
+          isOn: $usesTrash
+        )
+      }
+      GallerySection(caption: "Picker row") {
+        PutioPickerRow(
+          title: "Tunnel route",
+          selection: $route,
+          options: GalleryFixtures.routes
+        ) { $0 }
+      }
     }
-    GallerySection(caption: "Toggle row") {
-      PutioToggleRow(
-        title: "Use trash",
-        subtitle: "Deleted files stay in trash for a week",
-        isOn: $usesTrash
-      )
-    }
-    GallerySection(caption: "Picker row") {
-      PutioPickerRow(
-        title: "Tunnel route",
-        selection: $route,
-        options: GalleryFixtures.routes
-      ) { $0 }
+  #endif
+}
+
+#if !os(tvOS)
+  private struct SettingsRowsGallery: View {
+    @Binding var name: String
+    @Binding var invalid: String
+    @State private var sortOrder = GalleryFixtures.sortOrders[0]
+    @State private var movesToTrash = true
+    @State private var playbackMethod = GalleryFixtures.playbackMethods[0]
+
+    var body: some View {
+      NavigationStack {
+        Form {
+          Section {
+            PutioFormField(label: "Folder name", placeholder: "Folder name", text: $name)
+            PutioFormField(
+              label: "Receiver app ID",
+              placeholder: "Required",
+              text: $invalid,
+              errorText: "Enter a receiver app ID."
+            )
+          } header: {
+            GalleryTitle(page: .forms)
+              .textCase(nil)
+          }
+          PutioSettingsSection("Library") {
+            PutioNavigationRow(
+              "Trash", icon: .trash, value: "10.4 GB", valueStyle: .measurement
+            ) {
+              GalleryDestination()
+            }
+            PutioActionRow("Reset all sort settings", icon: .arrowCounterClockwise) {}
+          }
+          PutioSettingsSection("Files") {
+            PutioPickerRow(
+              "Default sort order",
+              selection: sortOrder,
+              options: GalleryFixtures.sortOrders,
+              save: { sortOrder = $0 }
+            ) { $0 }
+            PutioToggleRow("Move deleted files to trash", isOn: movesToTrash) {
+              movesToTrash = $0
+            }
+          }
+          PutioSettingsSection("Playback") {
+            PutioToggleRow(
+              title: "Resume where you left off",
+              subtitle: nil,
+              icon: nil,
+              source: .saved(false, pending: true, { _ in })
+            )
+            PutioToggleRow("Autoplay next video", isOn: false) { _ in
+              throw GalleryFixtures.SaveFailure()
+            }
+            if GalleryFixtures.showsHiddenRows {
+              PutioToggleRow("Rotate to landscape", isOn: true) { _ in }
+            }
+            PutioNavigationRow("Playback method", value: playbackMethod) {
+              GalleryDestination()
+            }
+            PutioNavigationRow("Proxy", value: "cdn77") {
+              GalleryDestination()
+            }
+          }
+          PutioSettingsSection("Choose how this app plays videos.") {
+            PutioChoiceList(
+              selection: playbackMethod,
+              options: GalleryFixtures.playbackMethods,
+              save: { playbackMethod = $0 }
+            ) { method in
+              PutioChoice(method, description: GalleryFixtures.playbackMethodDescription(method))
+            }
+          }
+          PutioSettingsSection("Subtitles") {
+            if GalleryFixtures.showsHiddenRows {
+              PutioToggleRow("Show subtitles", isOn: true) { _ in }
+            }
+          }
+          PutioSettingsSection {
+            PutioDestructiveRow("Sign out") {}
+          }
+          Section {
+            PutioToastView(PutioSettingSaveFailures.failureToast)
+          }
+          .listRowBackground(Color.clear)
+          .listRowInsets(EdgeInsets())
+        }
+        .scrollContentBackground(.hidden)
+        .putioSettingSaveFailures()
+      }
     }
   }
-}
+
+  private struct GalleryDestination: View {
+    var body: some View {
+      PutioEmptyStateView(title: "Folder is empty")
+        .putioContentBackground()
+    }
+  }
+#endif
 
 enum GalleryFixtures {
   static let fileRows = [
@@ -395,6 +473,20 @@ enum GalleryFixtures {
   ]
 
   static let routes = ["Frankfurt", "Amsterdam", "New York"]
+
+  static let sortOrders = ["Name, A to Z", "Name, Z to A"]
+
+  static let playbackMethods = ["Standard", "Direct play"]
+
+  static let showsHiddenRows = false
+
+  struct SaveFailure: Error {}
+
+  static func playbackMethodDescription(_ method: String) -> String {
+    method == "Standard"
+      ? "Works on every device. Converted videos play at up to 1080p, stereo."
+      : "Plays the original file, up to 4K and surround, when this iPhone can. Converted otherwise."
+  }
 
   #if os(iOS) || os(watchOS)
     static let downloadStates: [(state: PutioDownloadState, label: String)] = [
@@ -436,6 +528,7 @@ enum GalleryLayout {
     static let pagePadding = PutioTheme.TV.Spacing.large
     static let stateTileHeight = PutioTheme.TV.Spacing.xl * 3
     static let containerViewportHeight = PutioTheme.TV.Spacing.xxl * 5
+    static let formsViewportHeight = containerViewportHeight
     static let sheetPreviewBackground = Color.clear
   #else
     static let titleFont = PutioTheme.Typography.heading
@@ -446,6 +539,7 @@ enum GalleryLayout {
     static let pagePadding = PutioTheme.Spacing.space3
     static let stateTileHeight = PutioTheme.Spacing.space6 * 2
     static let containerViewportHeight = PutioTheme.Spacing.space6 * 7
+    static let formsViewportHeight = PutioTheme.Spacing.space6 * 14
     // The scaffold previews inside a scroll page rather than a real sheet,
     // so give it the surface a system sheet would provide.
     static let sheetPreviewBackground = PutioTheme.Colors.surface
