@@ -108,6 +108,7 @@ public struct PutioFileRow: View {
         .foregroundStyle(PutioTheme.Components.FileRow.icon)
       VStack(alignment: .leading, spacing: textGap) {
         Text(model.name)
+          .frame(height: 10).clipped()
           .putioFont(PutioFileRowLayout.nameFont)
           .foregroundStyle(PutioTheme.Colors.textPrimary)
           .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
